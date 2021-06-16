@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.rsschool.quiz.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.rsschool.quiz.QuizFragment"
+        android:label="QuizFragment" >
+        <action
+            android:id="@+id/action_quizFragment_self"
+            app:destination="@id/quizFragment" />
+        <action
+            android:id="@+id/action_quizFragment_to_finishGameFragment"
+            app:destination="@id/finishGameFragment" />
+        <action
+            android:id="@+id/action_quizFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+        <argument
+            android:name="score"
+            app:argType="integer" />
+        <argument
+            android:name="questionNumber"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishGameFragment"
+        android:name="com.rsschool.quiz.FinishGameFragment"
+        android:label="fragment_finish_game"
+        tools:layout="@layout/fragment_finish_game" >
+        <action
+            android:id="@+id/action_finishGameFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+    </fragment>
+</navigation>

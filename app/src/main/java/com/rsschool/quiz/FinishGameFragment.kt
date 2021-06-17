@@ -15,6 +15,8 @@ import java.lang.StringBuilder
 class FinishGameFragment : Fragment() {
     private var _binding: FragmentFinishGameBinding? = null
     private val binding get() = _binding!!
+    private var score = 0
+    private lateinit var answers:IntArray
     private lateinit var questions: MutableList<Question>
 
     override fun onCreateView(
@@ -22,9 +24,9 @@ class FinishGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentFinishGameBinding.inflate(inflater, container, false)
-
-//        val args = FragmentFinishGameBinding.fromBundle(requireArguments())
-//        questions = args.questions.toMutableList()
+        val args = QuizFragmentArgs.fromBundle(requireArguments())
+        score = args.score
+        answers = args.answerNumber
 
         //Системная кнопка назад
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -49,25 +51,30 @@ class FinishGameFragment : Fragment() {
             startNewGameBtn.setOnClickListener {
                 view?.findNavController()?.navigate(FinishGameFragmentDirections.actionFinishGameFragmentToStartFragment())
             }
+
+            //результат
+            resultTextView.text = createMessage(score,answers)
+             //   "Ваш рейтинг: $score из ${answers.size}"
+
         }
         return binding.root
     }
 
-//    private fun createMessage(): String {
-//        var count = 1
-//        val stringBuilder = StringBuilder("")
-//        return stringBuilder.apply {
-//            append("Your result: ${rightAnswers()} из ${questions.size} \n\n")
-//            for (question in questions) {
-//                append(
-//                    "${count++}) ${question.question}\n" +
-//                            "Your answer: ${question.answers?.get(question.answer)} \n\n"
-//                )
-//            }
-//        }.toString()
-//
-//
-//    }
+    private fun createMessage(score:Int, answers:IntArray): String {
+        val count = 0
+        val stringBuilder = StringBuilder("")
+        return stringBuilder.apply {
+            append("Ваш результат: ${score} из ${answers.size} \n\n")
+            for (question in getQuestionsForQuiz()) {
+                append(
+                    "На вопрос ${question.question}+",
+                            "Вы ответили: ${question.answers[answers[count]]} \n\n"
+                )
+            }
+        }.toString()
+
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -9,7 +9,9 @@
     android:id="@+id/result_text_view"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    android:textSize="10sp"
     android:text="Result:"
+    android:gravity="center"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 

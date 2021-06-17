@@ -1,13 +1,11 @@
 package com.rsschool.quiz
 
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.navigation.findNavController
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 
@@ -18,51 +16,64 @@ class QuizFragment : Fragment() {
     private var questionNumber = 0
     private var score = 0
     private var wrQuest = false
+    private lateinit var answers:IntArray
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val args = QuizFragmentArgs.fromBundle(requireArguments())
         score = args.score
         questionNumber = args.questionNumber
+        answers = args.answerNumber
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
-         fillViewQuestion(questionNumber)
+        fillViewQuestion(questionNumber)
         disableButtons()
+        pushedRadioButtons(answers)
 
             binding.apply {
                 radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                    if (checkedId == R.id.option_two && optionTwo.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                        wrQuest=true
-                        Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
-                    } else if (checkedId == R.id.option_one && optionOne.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                        wrQuest=true
-                        Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
-                    } else if (checkedId == R.id.option_three && optionThree.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                        wrQuest=true
-                        Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
-                    } else if (checkedId == R.id.option_four && optionFour.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                        wrQuest=true
-                        Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
+                    if (checkedId == R.id.option_two) {
+                        answers.set(questionNumber,2)
+                        if (optionTwo.text == getQuestionsForQuiz()[questionNumber].writeAnswer){
+                            wrQuest=true
+                        }
+                    } else if (checkedId == R.id.option_one) {
+                    answers.set(questionNumber,1)
+                    if (optionOne.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
+                        wrQuest = true
+                    }
+                    }else if(checkedId==R.id.option_three){
+                        answers.set(questionNumber,3)
+                        if (optionThree.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
+                            wrQuest=true
+                        }
+                    }else if(checkedId==R.id.option_four){
+                        answers.set(questionNumber,4)
+                        if (optionFour.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
+                            wrQuest=true
+                        }
+                    }else if (checkedId==R.id.option_five) {
+                        answers.set(questionNumber, 5)
+                        if (optionFive.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
+                            wrQuest = true
+                        }
                     }
                 }
-
+                    //кнопка далее
                 nextButton.setOnClickListener {
-                    Toast.makeText(context, "$questionNumber", Toast.LENGTH_SHORT).show()
                     questionNumber++
-                    Toast.makeText(context, "$questionNumber", Toast.LENGTH_SHORT).show()
                     if(questionNumber<= getQuestionsForQuiz().size-1) {
                         if(wrQuest){
                             score++
-                            Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
                         }
                         view?.findNavController()?.navigate(
-                            QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber))
+                            QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber,answers))
                     }else{
                         view?.findNavController()?.navigate(
-                            QuizFragmentDirections.actionQuizFragmentToFinishGameFragment())
+                            QuizFragmentDirections.actionQuizFragmentToFinishGameFragment(score,questionNumber,answers))
                     }
                 }
 
@@ -70,7 +81,7 @@ class QuizFragment : Fragment() {
                 previousButton.setOnClickListener {
                     previousQuestion()
                 }
-                    // предыдущий вопрос на тулбаре
+                // предыдущий вопрос на тулбаре
                 toolbar.setNavigationOnClickListener {
                     previousQuestion()
                 }
@@ -78,16 +89,28 @@ class QuizFragment : Fragment() {
         return binding.root
     }
 
+    private fun pushedRadioButtons(answers: IntArray) {
+      when(answers[questionNumber]){
+          1->binding.optionOne.isChecked = true
+          2->binding.optionTwo.isChecked = true
+          3->binding.optionThree.isChecked = true
+          4->binding.optionFour.isChecked = true
+          5->binding.optionFive.isChecked = true
+          else-> Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
+      }
+    }
+
     private fun previousQuestion() {
         if (questionNumber != 0) {
             questionNumber--
-            view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber))
+            view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber,answers))
         }
     }
 
     private fun disableButtons(){
          if (questionNumber==0) {
              binding.previousButton.isEnabled = false
+            // binding.toolbar.collapseIco
          }else if (questionNumber==4){
              binding.nextButton.text = "SHARE"
          }
@@ -96,7 +119,7 @@ class QuizFragment : Fragment() {
 
 
    fun fillViewQuestion(questionNumber:Int):Int{
-      // val questionNumber = questionNumber
+
        var score = score
        val thisQuestion = getQuestionsForQuiz()[questionNumber]
            binding.apply {

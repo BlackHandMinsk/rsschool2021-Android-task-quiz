@@ -53,7 +53,8 @@ class FinishGameFragment : Fragment() {
             }
 
             //результат
-            resultTextView.text = createMessage(score,answers)
+            resultTextView.text =  getScore(answers).toString()
+                //createMessage(score,answers)
              //   "Ваш рейтинг: $score из ${answers.size}"
 
         }
@@ -61,19 +62,29 @@ class FinishGameFragment : Fragment() {
     }
 
     private fun createMessage(score:Int, answers:IntArray): String {
-        val count = 0
+        var count = 0
         val stringBuilder = StringBuilder("")
         return stringBuilder.apply {
             append("Ваш результат: ${score} из ${answers.size} \n\n")
-            for (question in getQuestionsForQuiz()) {
-                append(
-                    "На вопрос ${question.question}+",
-                            "Вы ответили: ${question.answers[answers[count]]} \n\n"
-                )
+            getQuestionsForQuiz().forEach {
+                append("На вопрос ${it.question}",
+                    "Вы ответили: ${it.answers[answers[count]-1]} \n\n")
+                count++
             }
         }.toString()
 
 
+    }
+
+    private fun getScore(answers: IntArray):Int{
+        var score = 0
+        var count = 0
+        getQuestionsForQuiz().forEach {
+            if (it.writeAnswer==it.answers[answers[count]-1])
+                score++
+                count++
+        }
+        return score
     }
 
     override fun onDestroyView() {

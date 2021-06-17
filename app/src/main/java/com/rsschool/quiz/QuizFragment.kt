@@ -37,29 +37,36 @@ class QuizFragment : Fragment() {
                 radioGroup.setOnCheckedChangeListener { group, checkedId ->
                     if (checkedId == R.id.option_two) {
                         answers.set(questionNumber,2)
+                        nextButton.isEnabled = true
                         if (optionTwo.text == getQuestionsForQuiz()[questionNumber].writeAnswer){
                             wrQuest=true
                         }
                     } else if (checkedId == R.id.option_one) {
                     answers.set(questionNumber,1)
+                        nextButton.isEnabled = true
                     if (optionOne.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
                         wrQuest = true
                     }
                     }else if(checkedId==R.id.option_three){
                         answers.set(questionNumber,3)
+                        nextButton.isEnabled = true
                         if (optionThree.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
                             wrQuest=true
                         }
                     }else if(checkedId==R.id.option_four){
                         answers.set(questionNumber,4)
+                        nextButton.isEnabled = true
                         if (optionFour.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
                             wrQuest=true
                         }
                     }else if (checkedId==R.id.option_five) {
                         answers.set(questionNumber, 5)
+                        nextButton.isEnabled = true
                         if (optionFive.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
                             wrQuest = true
                         }
+                    }else{
+                        wrQuest=false
                     }
                 }
                     //кнопка далее
@@ -78,7 +85,8 @@ class QuizFragment : Fragment() {
                 }
 
                 //предыдущий вопрос
-                previousButton.setOnClickListener {
+                previousButton.setOnClickListener{
+                    binding.nextButton.isEnabled = true
                     previousQuestion()
                 }
                 // предыдущий вопрос на тулбаре
@@ -103,6 +111,7 @@ class QuizFragment : Fragment() {
     private fun previousQuestion() {
         if (questionNumber != 0) {
             questionNumber--
+            binding.nextButton.isEnabled=true
             view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber,answers))
         }
     }
@@ -110,7 +119,8 @@ class QuizFragment : Fragment() {
     private fun disableButtons(){
          if (questionNumber==0) {
              binding.previousButton.isEnabled = false
-            // binding.toolbar.collapseIco
+             binding.toolbar.setNavigationIcon(null)
+             binding.nextButton.isEnabled=false
          }else if (questionNumber==4){
              binding.nextButton.text = "SHARE"
          }

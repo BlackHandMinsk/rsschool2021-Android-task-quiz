@@ -28,9 +28,6 @@
             android:id="@+id/action_quizFragment_to_startFragment"
             app:destination="@id/startFragment" />
         <argument
-            android:name="score"
-            app:argType="integer" />
-        <argument
             android:name="questionNumber"
             app:argType="integer" />
         <argument
@@ -46,9 +43,6 @@
         <action
             android:id="@+id/action_finishGameFragment_to_startFragment"
             app:destination="@id/startFragment" />
-        <argument
-            android:name="score"
-            app:argType="integer" />
         <argument
             android:name="questionNumber"
             app:argType="integer" />

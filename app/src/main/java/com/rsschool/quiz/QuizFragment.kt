@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 
 
 class QuizFragment : Fragment() {
 
-    private lateinit var questions: MutableList<Question>
     private var questionNumber = 0
     private var score = 0
     private var wrQuest = false
@@ -20,13 +20,14 @@ class QuizFragment : Fragment() {
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val args = QuizFragmentArgs.fromBundle(requireArguments())
-        score = args.score
         questionNumber = args.questionNumber
+        setTheme()
         answers = args.answerNumber
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         fillViewQuestion(questionNumber)
@@ -38,35 +39,18 @@ class QuizFragment : Fragment() {
                     if (checkedId == R.id.option_two) {
                         answers.set(questionNumber,2)
                         nextButton.isEnabled = true
-                        if (optionTwo.text == getQuestionsForQuiz()[questionNumber].writeAnswer){
-                            wrQuest=true
-                        }
                     } else if (checkedId == R.id.option_one) {
                     answers.set(questionNumber,1)
                         nextButton.isEnabled = true
-                    if (optionOne.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                        wrQuest = true
-                    }
                     }else if(checkedId==R.id.option_three){
                         answers.set(questionNumber,3)
                         nextButton.isEnabled = true
-                        if (optionThree.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
-                            wrQuest=true
-                        }
                     }else if(checkedId==R.id.option_four){
                         answers.set(questionNumber,4)
                         nextButton.isEnabled = true
-                        if (optionFour.text== getQuestionsForQuiz()[questionNumber].writeAnswer){
-                            wrQuest=true
-                        }
                     }else if (checkedId==R.id.option_five) {
                         answers.set(questionNumber, 5)
                         nextButton.isEnabled = true
-                        if (optionFive.text == getQuestionsForQuiz()[questionNumber].writeAnswer) {
-                            wrQuest = true
-                        }
-                    }else{
-                        wrQuest=false
                     }
                 }
                     //кнопка далее
@@ -77,10 +61,10 @@ class QuizFragment : Fragment() {
                             score++
                         }
                         view?.findNavController()?.navigate(
-                            QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber,answers))
+                            QuizFragmentDirections.actionQuizFragmentSelf(questionNumber,answers))
                     }else{
                         view?.findNavController()?.navigate(
-                            QuizFragmentDirections.actionQuizFragmentToFinishGameFragment(score,questionNumber,answers))
+                            QuizFragmentDirections.actionQuizFragmentToFinishGameFragment(questionNumber,answers))
                     }
                 }
 
@@ -112,7 +96,7 @@ class QuizFragment : Fragment() {
         if (questionNumber != 0) {
             questionNumber--
             binding.nextButton.isEnabled=true
-            view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(score, questionNumber,answers))
+            view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(questionNumber,answers))
         }
     }
 
@@ -126,11 +110,8 @@ class QuizFragment : Fragment() {
          }
     }
 
-
-
    fun fillViewQuestion(questionNumber:Int):Int{
 
-       var score = score
        val thisQuestion = getQuestionsForQuiz()[questionNumber]
            binding.apply {
                radioGroup.clearCheck()
@@ -146,10 +127,34 @@ class QuizFragment : Fragment() {
        return questionNumber
    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setTheme() {
+        val theme: Int
+        val color: Int
+        when (questionNumber) {
+            0 -> {
+                theme = R.style.Theme_Quiz_First
+                color = R.color.first_question_status_bar
+            }
+            1 ->{
+                theme = R.style.Theme_Quiz_Second
+                color = R.color.second_question_status_bar
+            }
+            2 -> {
+                theme = R.style.Theme_Quiz_Third
+                color = R.color.third_question_status_bar
+            }
+            3 -> {
+                theme = R.style.Theme_Quiz_Fourth
+                color = R.color.fourth_question_status_bar
+            }
+            else -> {
+                theme = R.style.Theme_Quiz_Fifth
+                color = R.color.fifth_question_status_bar
+            }
+        }
+        requireContext().setTheme(theme)
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), color)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

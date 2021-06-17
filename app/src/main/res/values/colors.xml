@@ -5,9 +5,11 @@
     <color name="deep_orange_100">#ffccbc</color>
     <color name="deep_orange_100_light">#ffffee</color>
     <color name="deep_orange_100_dark">#cb9b8c</color>
+    <color name="first_question_status_bar">#cb9b8c</color>
     <color name="yellow_100">#fff9c4</color>
     <color name="yellow_100_light">#fffff7</color>
     <color name="yellow_100_dark">#cbc693</color>
+    <color name="second_question_status_bar">#cbc693</color>
     <color name="light_green_100">#dcedc8</color>
     <color name="light_green_100_light">#fffffb</color>
     <color name="light_green_100_dark">#aabb97</color>
@@ -17,4 +19,16 @@
     <color name="deep_purple_100">#d1c4e9</color>
     <color name="deep_purple_100_light">#fff7ff</color>
     <color name="deep_purple_100_dark">#a094b7</color>
+    <color name="primary_blue">#651fff</color>
+    <color name="primary_blue_dark">#0100ca</color>
+    <color name="primary_blue_variant">#a255ff</color>
+    <color name="third_question_status_bar">#a255ff</color>
+    <color name="primary_green">#00c853</color>
+    <color name="primary_green_dark">#009624</color>
+    <color name="primary_green_variant">#5efc82</color>
+    <color name="fourth_question_status_bar">#5efc82</color>
+    <color name="primary_yellow">#ffff00</color>
+    <color name="primary_yellow_dark">#c7cc00</color>
+    <color name="primary_yellow_variant">#ffff5a</color>
+    <color name="fifth_question_status_bar">#ffff5a</color>
 </resources>

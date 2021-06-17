@@ -11,11 +11,10 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.rsschool.quiz.databinding.FragmentStartBinding
 
-//
+
 class StartFragment : Fragment() {
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
-    private val questions = getQuestionsForQuiz().toTypedArray()
     private val answers = IntArray(getQuestionsForQuiz().size)
 
     override fun onCreateView(
@@ -31,7 +30,7 @@ class StartFragment : Fragment() {
 
         binding.startGameBtn.setOnClickListener() {
             view?.findNavController()
-                ?.navigate(StartFragmentDirections.actionStartFragmentToQuizFragment(0, 0,answers))
+                ?.navigate(StartFragmentDirections.actionStartFragmentToQuizFragment(0, answers))
         }
         return binding.root
     }

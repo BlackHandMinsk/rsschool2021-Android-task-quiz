@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.rsschool.quiz.databinding.FragmentQuizBinding
@@ -34,6 +35,11 @@ class QuizFragment : Fragment() {
         disableButtons()
         pushedRadioButtons(answers)
 
+        //Системная кнопка назад
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+           previousQuestion()
+        }
+
             binding.apply {
                 radioGroup.setOnCheckedChangeListener { group, checkedId ->
                     if (checkedId == R.id.option_two) {
@@ -53,7 +59,7 @@ class QuizFragment : Fragment() {
                         nextButton.isEnabled = true
                     }
                 }
-                    //кнопка далее
+                //кнопка далее
                 nextButton.setOnClickListener {
                     questionNumber++
                     if(questionNumber<= getQuestionsForQuiz().size-1) {
@@ -70,7 +76,6 @@ class QuizFragment : Fragment() {
 
                 //предыдущий вопрос
                 previousButton.setOnClickListener{
-                    binding.nextButton.isEnabled = true
                     previousQuestion()
                 }
                 // предыдущий вопрос на тулбаре
@@ -88,35 +93,38 @@ class QuizFragment : Fragment() {
           3->binding.optionThree.isChecked = true
           4->binding.optionFour.isChecked = true
           5->binding.optionFive.isChecked = true
-          else-> Toast.makeText(context, "$score", Toast.LENGTH_SHORT).show()
       }
     }
 
     private fun previousQuestion() {
         if (questionNumber != 0) {
             questionNumber--
-            binding.nextButton.isEnabled=true
             view?.findNavController()?.navigate(QuizFragmentDirections.actionQuizFragmentSelf(questionNumber,answers))
         }
     }
 
     private fun disableButtons(){
-         if (questionNumber==0) {
-             binding.previousButton.isEnabled = false
-             binding.toolbar.setNavigationIcon(null)
-             binding.nextButton.isEnabled=false
-         }else if (questionNumber==4){
-             binding.nextButton.text = "SHARE"
-         }
+        when(questionNumber) {
+            0 -> {
+                    binding.previousButton.isEnabled = false
+                    binding.toolbar.navigationIcon = null
+                    binding.nextButton.isEnabled = answers[questionNumber]>0}
+            1-> binding.nextButton.isEnabled = answers[questionNumber]>0
+            2-> binding.nextButton.isEnabled = answers[questionNumber]>0
+            3-> binding.nextButton.isEnabled = answers[questionNumber]>0
+            4->{ binding.nextButton.text = "SHARE"
+                binding.nextButton.isEnabled=false
+                binding.nextButton.isEnabled = answers[questionNumber]>0}
+            else-> binding.nextButton.isEnabled = answers[questionNumber]>0
+            }
     }
 
-   fun fillViewQuestion(questionNumber:Int):Int{
+   private fun fillViewQuestion(questionNumber:Int):Int{
 
        val thisQuestion = getQuestionsForQuiz()[questionNumber]
            binding.apply {
                radioGroup.clearCheck()
                toolbar.title = "Question ${questionNumber + 1}"
-
                question.text = thisQuestion.question
                optionOne.text = thisQuestion.answers[0]
                optionTwo.text = thisQuestion.answers[1]
@@ -133,24 +141,19 @@ class QuizFragment : Fragment() {
         when (questionNumber) {
             0 -> {
                 theme = R.style.Theme_Quiz_First
-                color = R.color.first_question_status_bar
-            }
+                color = R.color.first_question_status_bar}
             1 ->{
                 theme = R.style.Theme_Quiz_Second
-                color = R.color.second_question_status_bar
-            }
+                color = R.color.second_question_status_bar}
             2 -> {
                 theme = R.style.Theme_Quiz_Third
-                color = R.color.third_question_status_bar
-            }
+                color = R.color.third_question_status_bar}
             3 -> {
                 theme = R.style.Theme_Quiz_Fourth
-                color = R.color.fourth_question_status_bar
-            }
+                color = R.color.fourth_question_status_bar}
             else -> {
                 theme = R.style.Theme_Quiz_Fifth
-                color = R.color.fifth_question_status_bar
-            }
+                color = R.color.fifth_question_status_bar}
         }
         requireContext().setTheme(theme)
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), color)

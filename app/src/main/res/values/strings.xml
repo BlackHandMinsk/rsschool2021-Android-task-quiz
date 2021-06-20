@@ -2,4 +2,8 @@
     <string name="app_name">Quiz</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="share_btn_txt">Share</string>
+    <string name="exit_btn_text">Exit</string>
+    <string name="new_game_btn_text">Back to new game</string>
+    <string name="result_text">Result:</string>
 </resources>

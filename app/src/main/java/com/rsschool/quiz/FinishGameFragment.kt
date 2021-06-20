@@ -52,7 +52,7 @@ class FinishGameFragment : Fragment() {
             }
 
             //Результат в текствью
-            resultTextView.text =  "Ваш результат: ${getScore(answers)} из ${answers.size}"
+            resultTextView.text =  "YOU RESULT: ${getScore(answers)} из ${answers.size}"
         }
         return binding.root
     }
@@ -61,10 +61,10 @@ class FinishGameFragment : Fragment() {
         var count = 0
         val stringBuilder = StringBuilder("")
         return stringBuilder.apply {
-            append("Ваш результат: ${getScore(answers)} из ${answers.size} \n\n")
+            append("YOU RESULT: ${getScore(answers)} из ${answers.size} \n\n")
             getQuestionsForQuiz().forEach {
-                append("На вопрос ${it.question}",
-                    "Вы ответили: ${it.answers[answers[count]-1]} \n\n")
+                append("НА ВОПРОС: ${it.question}\n",
+                    "ВЫ ОТВЕТИЛИ: ${it.answers[answers[count]-1]} \n\n")
                 count++
             }
         }.toString()

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.core.app.ActivityCompat
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.rsschool.quiz.databinding.FragmentStartBinding
 
@@ -20,15 +19,16 @@ class StartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentStartBinding.inflate(inflater, container, false)
+
         //Системная кнопка назад
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             ActivityCompat.finishAffinity(requireActivity())
         }
 
 
-        binding.startGameBtn.setOnClickListener() {
+        binding.startGameBtn.setOnClickListener {
             view?.findNavController()
                 ?.navigate(StartFragmentDirections.actionStartFragmentToQuizFragment(0, answers))
         }

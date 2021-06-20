@@ -21,7 +21,7 @@ class FinishGameFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFinishGameBinding.inflate(inflater, container, false)
         val args = QuizFragmentArgs.fromBundle(requireArguments())
         answers = args.answerNumber
@@ -32,7 +32,7 @@ class FinishGameFragment : Fragment() {
                 ?.navigate(FinishGameFragmentDirections.actionFinishGameFragmentToStartFragment())
         }
         binding.apply {
-            // share button
+            // Кнопка поделиться
             shareBtn.setOnClickListener {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.setType("text/plain")
@@ -40,17 +40,18 @@ class FinishGameFragment : Fragment() {
                     .putExtra(Intent.EXTRA_TEXT, createMessage(answers))
                 startActivity(intent)
             }
-            //exit button
+
+            //Кнопка выход
             exitBtn.setOnClickListener {
                 ActivityCompat.finishAffinity(requireActivity())
             }
 
-            //start new game btn
+            //Кнопка начать новую игру
             startNewGameBtn.setOnClickListener {
                 view?.findNavController()?.navigate(FinishGameFragmentDirections.actionFinishGameFragmentToStartFragment())
             }
 
-            //результат
+            //Результат в текствью
             resultTextView.text =  "Ваш результат: ${getScore(answers)} из ${answers.size}"
         }
         return binding.root

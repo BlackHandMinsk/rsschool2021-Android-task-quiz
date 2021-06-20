@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -15,8 +14,6 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 class QuizFragment : Fragment() {
 
     private var questionNumber = 0
-    private var score = 0
-    private var wrQuest = false
     private lateinit var answers:IntArray
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
@@ -41,31 +38,34 @@ class QuizFragment : Fragment() {
         }
 
             binding.apply {
-                radioGroup.setOnCheckedChangeListener { group, checkedId ->
-                    if (checkedId == R.id.option_two) {
-                        answers.set(questionNumber,2)
-                        nextButton.isEnabled = true
-                    } else if (checkedId == R.id.option_one) {
-                    answers.set(questionNumber,1)
-                        nextButton.isEnabled = true
-                    }else if(checkedId==R.id.option_three){
-                        answers.set(questionNumber,3)
-                        nextButton.isEnabled = true
-                    }else if(checkedId==R.id.option_four){
-                        answers.set(questionNumber,4)
-                        nextButton.isEnabled = true
-                    }else if (checkedId==R.id.option_five) {
-                        answers.set(questionNumber, 5)
-                        nextButton.isEnabled = true
+                radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.option_two -> {
+                            answers[questionNumber] = 2
+                            nextButton.isEnabled = true
+                        }
+                        R.id.option_one -> {
+                            answers[questionNumber] = 1
+                            nextButton.isEnabled = true
+                        }
+                        R.id.option_three -> {
+                            answers[questionNumber] = 3
+                            nextButton.isEnabled = true
+                        }
+                        R.id.option_four -> {
+                            answers[questionNumber] = 4
+                            nextButton.isEnabled = true
+                        }
+                        R.id.option_five -> {
+                            answers[questionNumber] = 5
+                            nextButton.isEnabled = true
+                        }
                     }
                 }
                 //кнопка далее
                 nextButton.setOnClickListener {
                     questionNumber++
                     if(questionNumber<= getQuestionsForQuiz().size-1) {
-                        if(wrQuest){
-                            score++
-                        }
                         view?.findNavController()?.navigate(
                             QuizFragmentDirections.actionQuizFragmentSelf(questionNumber,answers))
                     }else{
@@ -112,7 +112,7 @@ class QuizFragment : Fragment() {
             1-> binding.nextButton.isEnabled = answers[questionNumber]>0
             2-> binding.nextButton.isEnabled = answers[questionNumber]>0
             3-> binding.nextButton.isEnabled = answers[questionNumber]>0
-            4->{ binding.nextButton.text = "SHARE"
+            4->{ binding.nextButton.text = "SUBMIT"
                 binding.nextButton.isEnabled=false
                 binding.nextButton.isEnabled = answers[questionNumber]>0}
             else-> binding.nextButton.isEnabled = answers[questionNumber]>0
